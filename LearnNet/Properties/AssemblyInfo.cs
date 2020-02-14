@@ -34,3 +34,8 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+// MessagePack Friendly
+[assembly: InternalsVisibleTo("MessagePack")]
+[assembly: InternalsVisibleTo("MessagePack.Resolvers.DynamicObjectResolver")]
+[assembly: InternalsVisibleTo("MessagePack.Resolvers.DynamicUnionResolver")]

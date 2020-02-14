@@ -57,7 +57,7 @@ namespace LearnNet
             MemoryStream sendStream = new MemoryStream();
             serializer.Pack(sendStream, m);
 
-            return Session.Send(sendStream.GetBuffer());
+            return Session.Send(sendStream.GetBuffer(), 0, (int)sendStream.Position);
         }
 
         public Publisher.Result Subscribe(object o, uint msgType, Action<Msg> action)
@@ -100,7 +100,7 @@ namespace LearnNet
 
         public override void OnDisconnected(Result result, string reason)
         {
-            var m = new MsgDisconnected { Protocol = this };
+            var m = new MsgDisconnected { Protocol = this, Reason = reason };
             listener.Notify(m);
         }
 

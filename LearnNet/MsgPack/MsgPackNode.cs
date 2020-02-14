@@ -25,18 +25,18 @@ namespace LearnNet
         public MsgPackNode()
         {
             this.acceptor = new MsgPackProtocol(this);
-
-            acceptor.Subscribe(this, (uint)MsgInternal.AcceptedForNode, (m) => { OnAccepted(m); });
         }
 
-        public Result Listen(string address, int backLog)
+        public Result Listen(string address, int backLog, object o, Action<Msg> accepted)
         {
             logger.Debug($"Listening. Address:{address}, Backlog:{backLog}");
+
+            acceptor.Subscribe(o, (uint)MsgInternal.Accepted, accepted);
 
             return acceptor.Listen(address, backLog);
         }
 
-        public Result Connect(string address)
+        public Result Connect(string address, object o, Action<Msg> connected, Action<Msg> disconnected)
         {
             var c = new MsgPackProtocol(this);
 
@@ -49,8 +49,10 @@ namespace LearnNet
                 protocols[c.ProtocolId] = c;
             }
 
-            c.Subscribe(this, (uint)MsgInternal.Connected, (m) => { OnConnected(m); });
-            c.Subscribe(this, (uint)MsgInternal.Disconnected, (m) => { OnDisconnected(m); });
+            c.Subscribe(this, (uint)MsgInternal.Connected, OnConnected);
+            c.Subscribe(this, (uint)MsgInternal.Disconnected, OnDisconnected);
+            c.Subscribe(o, (uint)MsgInternal.Connected, connected);
+            c.Subscribe(o, (uint)MsgInternal.Disconnected, disconnected);
 
             return c.Connect(address);
         }
@@ -67,7 +69,18 @@ namespace LearnNet
 
             while ( recvQ.TryDequeue(out m) )
             {
-                m.Protocol.Post(m);
+                switch (m.Type)
+                {
+                    case (uint)MsgInternal.AcceptedForNode: // 내부에서만 처리
+                        OnAccepted(m);
+                        break;
+                    case (uint)MsgInternal.Accepted: // Accepted는 accetpr를 통해서만 전달
+                        acceptor.Post(m);
+                        break;
+                    default:
+                        m.Protocol.Post(m);
+                        break;
+                } 
             }
         }
 
@@ -120,7 +133,6 @@ namespace LearnNet
             return m;
         }
 
-
         private void OnAccepted(Msg m)
         {
             // m의 소켓을 갖고 새로운 프로토콜을 만든다. 
@@ -135,9 +147,13 @@ namespace LearnNet
                 protocols[p.ProtocolId] = p;
             }
 
-            p.Subscribe(this, (uint)MsgInternal.Disconnected, (x) => { OnDisconnected(x); });
-            p.BeginRecvInternalFromNode();
+            // 애플리케이션에 전달
+            var msgApp = new MsgAccepted() { Protocol = p };
+            Notify(msgApp);
 
+            // 연결 해제 내가 받도록 설정
+            p.Subscribe(this, (uint)MsgInternal.Disconnected, OnDisconnected);
+            p.BeginRecvInternalFromNode();
         }
 
         private void OnConnected(Msg m)

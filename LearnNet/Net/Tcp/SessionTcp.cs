@@ -114,7 +114,7 @@ namespace LearnNet
 
         public bool IsConnected()
         {
-            return socket != null && socket.Connected;
+            return socket != null; // socket.Closed가 false인 경우가 있다. 
         }
 
         public void Disconnect()
@@ -146,6 +146,8 @@ namespace LearnNet
         {
             try
             {
+                logger.Trace("RequestAccept.");
+
                 acceptEventArgs.AcceptSocket = null;
             
                 bool willRaiseEvent = listenSocket.AcceptAsync(acceptEventArgs);
@@ -259,7 +261,7 @@ namespace LearnNet
 
         void OnConnectCompleted(object sender, SocketAsyncEventArgs e)
         {
-            // TODO: disposing 처리 
+            logger.Trace( $"Connected to {host}:{port}");
 
             var socket = (Socket)e.UserToken;
 

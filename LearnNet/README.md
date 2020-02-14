@@ -93,7 +93,28 @@ MsgPack 기반. 약간 더 일반화 해서 Tcp 상에서 임의의 프로토콜
 
 Accept를 C#에서 비동기로 구현한 적이 없어 이번에 구현한다. 받는 흐름만 제대로 만들어지면 된다. 
 
+생각보다 오래 걸렸다. 역시 통신은 민감한 부분이 있다. 
 
+- Posting과 Subscription 간의 조절 
+  - 포스팅 중에 Subscribe 호출이 가능 
+- 콜백들 조절 
+
+
+
+# MessagePack Serialization 처리와 통신 
+
+
+
+```c#
+// MessagePack Friendly
+[assembly: InternalsVisibleTo("MessagePack")]
+[assembly: InternalsVisibleTo("MessagePack.Resolvers.DynamicObjectResolver")]
+[assembly: InternalsVisibleTo("MessagePack.Resolvers.DynamicUnionResolver")]
+```
+
+위를 추가해야 제대로 된다. 
+
+송신 되고 에코 받아서 수신 처리하는 부분에서 막힘 
 
 
 

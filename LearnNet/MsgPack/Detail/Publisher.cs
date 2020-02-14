@@ -141,13 +141,19 @@ namespace LearnNet
 
         public int Post(Msg m)
         {
+            TypeSubs typeSubs = null;
+
             using (var rlock = new ReadLock(rwLock))
             {
                 if (subs.ContainsKey(m.Type))
                 {
-                    var typeSubs = subs[m.Type];
-                    return typeSubs.Post(m);
+                    typeSubs = subs[m.Type];
                 }
+            }
+
+            if ( typeSubs != null )
+            {
+                typeSubs.Post(m);
             }
 
             return 0;
