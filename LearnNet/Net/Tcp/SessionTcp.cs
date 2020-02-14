@@ -16,12 +16,13 @@ namespace LearnNet
         private ProtocolTcp protocol;
         private string host;
         private ushort port;
-        private Action<bool, string> connected;
-        private Action<bool, string> disconnected;
+
+        private Socket listenSocket;
         private Socket socket;
         private const int recvBufferSize = 32*1024;
         private byte[] recvBuffer = new byte[recvBufferSize];
 
+        private SocketAsyncEventArgs acceptEventArgs;
         private SocketAsyncEventArgs connectEventArgs;
         private SocketAsyncEventArgs rxEventArgs;
         private SocketAsyncEventArgs txEventArgs;
@@ -44,25 +45,60 @@ namespace LearnNet
             this.protocol = protocol;
             this.accumulStream = sendStream1;
 
+            acceptEventArgs = new SocketAsyncEventArgs();
             connectEventArgs = new SocketAsyncEventArgs();
             rxEventArgs = new SocketAsyncEventArgs();
             txEventArgs = new SocketAsyncEventArgs();
 
+            acceptEventArgs.Completed += OnAcceptCompleted;
             connectEventArgs.Completed += OnConnectCompleted;
             rxEventArgs.Completed += OnRecvCompleted;
             txEventArgs.Completed += OnSendCompleted;
 
             rxList.Add(new ArraySegment<byte>(recvBuffer));
         }
-        public bool Connect(string address, Action<bool, string> connected, Action<bool, string> disconnected)
+
+        /// <summary>
+        /// 외부에서 소켓을 제공해주는 생성자. 수신을 시작한다. 
+        /// </summary>
+        /// <param name="protocol"></param>
+        /// <param name="socket"></param>
+        public SessionTcp(ProtocolTcp protocol, Socket socket)
+            : this(protocol)
+        {
+            this.socket = socket;
+        }
+
+        public void BeginRecvInternal()
+        {
+            RequestRecv();
+        }
+
+        public Result Listen(string address, int backLog)
+        {
+            string h;
+            ushort p;
+
+            ParseAddress(address, out h, out p);
+
+            IPAddress ipAddress = Dns.GetHostAddresses(h)[0];
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, p);
+            
+            listenSocket = new Socket(localEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            listenSocket.Bind(localEndPoint);
+            listenSocket.Listen(backLog);
+
+            RequestAccept();
+
+            return Result.Success;
+        }
+
+        public Result Connect(string address)
         {
             Contract.Assert(socket == null);
             Contract.Assert(protocol != null);
 
-            this.connected = connected;
-            this.disconnected = disconnected;
-
-            ParseAddress(address);
+            ParseAddress(address, out host, out port);
 
             // XXX: GetHostAddress(host)[0]는 대부분의 경우 괜찮겠지만 확실한 방법은 아니다. 
 
@@ -73,7 +109,7 @@ namespace LearnNet
 
             ConnectInternal(socket, remoteEP);
 
-            return true;
+            return Result.Success;
         }
 
         public bool IsConnected()
@@ -88,12 +124,12 @@ namespace LearnNet
             DisconnectInternal("Disconnected by Application");
         }
 
-        public bool Send(byte[] payload)
+        public Result Send(byte[] payload)
         {
             return Send(payload, 0, payload.Length);
         }
 
-        public bool Send(byte[] payload, int offset, int length)
+        public Result Send(byte[] payload, int offset, int length)
         {
             lock (lockSendStream)
             {
@@ -103,7 +139,26 @@ namespace LearnNet
 
             RequestSend();
 
-            return true;
+            return Result.Success;
+        }
+
+        void RequestAccept()
+        {
+            try
+            {
+                acceptEventArgs.AcceptSocket = null;
+            
+                bool willRaiseEvent = listenSocket.AcceptAsync(acceptEventArgs);
+                if (!willRaiseEvent)
+                {
+                    OnAcceptCompleted(null, acceptEventArgs);
+                }
+            }
+            catch (ObjectDisposedException) { }
+            catch (Exception e)
+            {
+                Fail($"recv error {e}");
+            }
         }
 
         void RequestRecv()
@@ -191,8 +246,15 @@ namespace LearnNet
             catch (Exception e)
             {
                 // connected 콜백으로 에러를 보낸다. 
-                connected(false, $"Error connecting to {endpoint} : {e.Message}");
+                protocol.OnConnected(Result.Fail, $"Error connecting to {endpoint} : {e.Message}");
             }
+        }
+
+        private void OnAcceptCompleted(object sender, SocketAsyncEventArgs e)
+        {
+            protocol.OnAccepted(e.AcceptSocket);
+
+            RequestAccept();
         }
 
         void OnConnectCompleted(object sender, SocketAsyncEventArgs e)
@@ -203,7 +265,7 @@ namespace LearnNet
 
             if (e.SocketError == SocketError.Success)
             {
-                connected(true, $"Connected to {host}:{port}");
+                protocol.OnConnected(Result.Success, $"Connected to {host}:{port}");
 
                 // TODO: 아래 주석 내용 확인
                 // connectEventArgs.Completed -= OnConnectCompleted;
@@ -214,7 +276,7 @@ namespace LearnNet
             }
             else
             {
-                connected(false, $"{e.RemoteEndPoint} error connecting to {e.SocketError}");
+                protocol.OnConnected(Result.Fail, $"{e.RemoteEndPoint} error connecting to {e.SocketError}");
             }
         }
 
@@ -246,7 +308,7 @@ namespace LearnNet
 
                     recvStream.Write(recvBuffer, 0, bytesRead);
 
-                    protocol.Receive(recvStream);
+                    protocol.OnReceived(recvStream);
 
                     // 앞으로 이동 시킴
                     recvStream.Seek(0, SeekOrigin.Begin); 
@@ -315,6 +377,7 @@ namespace LearnNet
 
             DisconnectInternal(msg);
         }
+
         private void DisconnectInternal(string msg)
         {
             if (IsConnected())
@@ -326,18 +389,28 @@ namespace LearnNet
                 txEventArgs.Dispose();
                 rxEventArgs.Dispose();
 
-                disconnected(activeClose, msg);
+                if (activeClose)
+                {
+                    protocol.OnDisconnected(Result.Success_ActiveClose, msg);
+                }
+                else
+                {
+                    protocol.OnDisconnected(Result.Fail, msg);
+                }
             }
         }
 
-        private void ParseAddress(string address)
+        private void ParseAddress(string address, out string h, out ushort p)
         {
+            h = "";
+            p = 0;
+
             string[] s = address.Split(':'); 
 
             if ( s.Length >= 2)
             {
-                host = s[0];
-                port = ushort.Parse(s[1]);
+                h = s[0];
+                p = ushort.Parse(s[1]);
             }
         }
     }

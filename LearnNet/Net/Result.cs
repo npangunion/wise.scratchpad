@@ -9,6 +9,8 @@ namespace LearnNet
     public enum Result
     {
         Success, 
+        Success_ActiveClose,
         Fail,
+        Fail_MsgTypeNotFound
     }
 }

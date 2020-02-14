@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Net;
 
 namespace LearnNet 
 {
@@ -18,7 +19,7 @@ namespace LearnNet
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        Result Listen(string address);
+        Result Listen(string address, int backLog);
 
         /// <summary>
         /// 연결 요청을 한다. 
@@ -41,11 +42,17 @@ namespace LearnNet
         /// <summary>
         /// 연결 결과를 통지 받는다. 
         /// </summary>
-        void OnConnected(Result result, string address);
+        void OnConnected(Result result, string message);
+
+        /// <summary>
+        /// 연결을 받는다. 
+        /// </summary>
+        /// <param name="socket"></param>
+        void OnAccepted(object socket);
 
         /// <summary>
         /// 연결 종료 결과를 통지 받는다.
         /// </summary>
-        void OnDisconnected(Result result, string address);
+        void OnDisconnected(Result result, string message);
     }
 }

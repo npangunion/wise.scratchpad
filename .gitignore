@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+/LearnNet/bin
+/LearnNet/obj
+/LearnNet/packages
+/LearnNet/TestResults

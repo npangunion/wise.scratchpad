@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Sockets;
 
 namespace LearnNet
 {
@@ -13,15 +14,20 @@ namespace LearnNet
         {
         }
 
+        public ProtocolTcp(Socket socket)
+        {
+            session = new SessionTcp(this, socket);
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        Result Listen(string address)
+        public Result Listen(string address, int backLog)
         {
             session = new SessionTcp(this);
-            return session.Listen(address);
+            return session.Listen(address, backLog);
         }
 
         /// <summary>
@@ -55,11 +61,18 @@ namespace LearnNet
         /// <summary>
         /// 연결 결과를 통지 받는다. 
         /// </summary>
-        public abstract void OnConnected(Result result, string address);
+        public abstract void OnConnected(Result result, string message);
+
+        /// <summary>
+        /// 연결을 받았음
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="message"></param>
+        public abstract void OnAccepted(object socket);
 
         /// <summary>
         /// 연결 종료 결과를 통지 받는다.
         /// </summary>
-        public abstract void OnDisconnected(Result result, string address);
+        public abstract void OnDisconnected(Result result, string message);
     }
 }
