@@ -48,6 +48,10 @@ namespace LearnNet
             private void OnEcho(Msg m)
             {
                 ++MessageCount;
+
+                var echo = new MsgEcho();
+                echo.Hello = $"Hello {MessageCount}";
+                m.Protocol.Send(echo);
             }
             
         }
@@ -69,29 +73,31 @@ namespace LearnNet
         static void Main(string[] args)
         {
 
-            var t = DynamicObjectResolver.Instance.GetFormatter<MsgEcho>();
 
-            // MessagePack.Formatters.TestObjectFormatter
-            Console.WriteLine(t.GetType().FullName);
-
-            // MessagePack.Resolvers.DynamicObjectResolver, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-            Console.WriteLine(t.GetType().Assembly.FullName);
 
             MsgSerializerFactory.Instance().Set(new MsgEcho().Type, typeof(MsgEcho));
 
             if (args[0] == "client")
             {
-                Client client = new Client();
                 MsgPackNode node = new MsgPackNode();
+
+                Client c1 = new Client();
 
                 node.Connect(
                     "127.0.0.1:5000", 
-                    client, 
-                    client.OnConnected, 
-                    client.OnDisconnected);
+                    c1, 
+                    c1.OnConnected, 
+                    c1.OnDisconnected);
 
+                Client c2 = new Client();
 
-                while ( client.MessageCount < 1000 )
+                node.Connect(
+                    "127.0.0.1:5000", 
+                    c2, 
+                    c2.OnConnected, 
+                    c2.OnDisconnected);
+
+                while ( c1.MessageCount < 1000 || c2.MessageCount < 1000 )
                 {
                     node.Process();
 
@@ -110,7 +116,7 @@ namespace LearnNet
                 {
                     node.Process();
 
-                    System.Threading.Thread.Sleep(10);
+                    System.Threading.Thread.Sleep(1);
                 }
             } 
         }

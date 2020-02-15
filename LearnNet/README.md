@@ -116,6 +116,18 @@ Accept를 C#에서 비동기로 구현한 적이 없어 이번에 구현한다. 
 
 송신 되고 에코 받아서 수신 처리하는 부분에서 막힘 
 
+```c#
+var t = DynamicObjectResolver.Instance.GetFormatter<MsgEcho>();
+// MessagePack.Formatters.TestObjectFormatter
+Console.WriteLine(t.GetType().FullName);
+// MessagePack.Resolvers.DynamicObjectResolver, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+Console.WriteLine(t.GetType().Assembly.FullName);
+```
+
+Resolver 확인. 
+
+
+
 
 
 
