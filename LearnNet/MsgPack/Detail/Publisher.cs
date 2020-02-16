@@ -22,6 +22,13 @@ namespace LearnNet
             public Action<Msg> Action { get; set; }
 
             public uint MsgType { get; set; }
+
+            public bool Unsubscribed { get; set; }
+
+            public Sub()
+            {
+                Unsubscribed = false;
+            }
         }
 
         private class TypeSubs
@@ -30,6 +37,8 @@ namespace LearnNet
             private uint msgType = 0;
 
             public uint MsgType { get { return msgType;  } }
+
+            private TickTimer purgeTimer = new TickTimer();
 
             public TypeSubs(uint msgType)
             {
@@ -63,16 +72,19 @@ namespace LearnNet
 
                     foreach ( var sub in subs )
                     {
-                        lst.Add(sub.Action);
+                        if (sub.Unsubscribed == false)
+                        {
+                            sub.Action(m);
+                            ++postCount;
+                        }
                     }
+                }
 
-                    // 실행 중 Unsubscribe가 있을 수 있어 위와 같이 처리. 
-                    // 더 나은 방법은??
-                    foreach ( var action in lst )
-                    {
-                        action(m);
-                        ++postCount;
-                    }
+                // 최적화. 하나의 타잎에 대한 등록해제 삭제. 가끔씩 실행
+                if (purgeTimer.Elapsed() > 5000)
+                {
+                    // unsubscribed 지움. 하나의 타잎에 대한 등록이라 작음. 
+                    subs.RemoveAll((sub) => sub.Unsubscribed == true);
                 }
 
                 return postCount;
@@ -80,22 +92,34 @@ namespace LearnNet
 
             public int GetSubscriptionCount()
             {
-                return subs.Count;
+                return subs.Count((x) => { return x.Unsubscribed == false; });
             }
 
             public int GetSubscriptionCount(object o)
             {
-                return subs.Count((x) => { return x.Owner == o; });
+                return subs.Count((x) => { return x.Owner == o && x.Unsubscribed == false; });
             }
 
             public void Unsubscribe(object owner, uint msgType)
             {
-                subs.RemoveAll(x => x.Owner == owner && msgType == x.MsgType); 
+                foreach ( var sub in subs )
+                {
+                    if ( sub.Owner == owner && msgType == sub.MsgType  )
+                    {
+                        sub.Unsubscribed = true;
+                    }
+                }
             }
 
             public void Unsubscribe(object owner)
             {
-                subs.RemoveAll(x => x.Owner == owner);
+                foreach ( var sub in subs )
+                {
+                    if ( sub.Owner == owner)
+                    {
+                        sub.Unsubscribed = true;
+                    }
+                }
             }
 
             public bool IsDuplicate(Sub sub)
@@ -153,7 +177,7 @@ namespace LearnNet
 
             if ( typeSubs != null )
             {
-                typeSubs.Post(m);
+                return typeSubs.Post(m);
             }
 
             return 0;
