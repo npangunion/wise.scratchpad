@@ -180,6 +180,22 @@ Add-Content -Path $Profile.CurrentUserAllHosts -Value '$Env:Path += ";C:\Temp"'
 여기가 하려는 것이었다. 
 위의 효과는 다시 시작해야 나타난다. 바로 적용하려면 어떻게 해야 하는가? 
 
+```powershell
+[Environment]::SetEnvironmentVariable
+     ("INCLUDE", $env:INCLUDE, [System.EnvironmentVariableTarget]::User)
+```     
+
+- 사용자 경로 변수 변경 
+
+```powershell
+[Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", "User") + ";C:\bin", "User")
+```
+
+SetEnviromentVariable 함수 
+- 환경 변수 이름 (문자열) 
+- 값 (문자열) 
+- 범위 ("User", "Machine")
+
 
 ## Grep 
 
@@ -196,7 +212,6 @@ https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/
 Get-Command | Out-File -FilePath .\Command.txt
 Select-String -Path .\Command.txt -Pattern 'Get', 'Set'  -NotMatch
 ```
-
 
 
 
