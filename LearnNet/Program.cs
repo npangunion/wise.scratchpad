@@ -27,6 +27,8 @@ namespace LearnNet
         {
             public int MessageCount { get; private set; }
 
+            private Logger logger = LogManager.GetCurrentClassLogger();
+
             public Client()
             {
                 MessageCount = 0;
@@ -52,12 +54,16 @@ namespace LearnNet
                 var echo = new MsgEcho();
                 echo.Hello = $"Hello {MessageCount}";
                 m.Protocol.Send(echo);
+
+                logger.Info($"Echo. {echo.Hello}");
             }
             
         }
 
         class Server
         {
+            private Logger logger = LogManager.GetCurrentClassLogger();
+
             public void OnAccepted(Msg m)
             {
 
@@ -67,14 +73,15 @@ namespace LearnNet
             public void OnEcho(Msg m)
             {
                 m.Protocol.Send(m);
+
+                var echo = (MsgEcho)m;
+
+                logger.Info($"Echo. {echo.Hello}");
             }
         }
 
         static void Main(string[] args)
         {
-
-
-
             MsgSerializerFactory.Instance().Set(new MsgEcho().Type, typeof(MsgEcho));
 
             if (args[0] == "client")
