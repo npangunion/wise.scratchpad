@@ -40,3 +40,4 @@ obj
 *.csproj.user
 Debug
 Release
+/LearnRecast/generated

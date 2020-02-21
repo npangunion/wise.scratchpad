@@ -44,8 +44,10 @@ end
 
 project "GoRecast"
 	kind "ConsoleApp"
+
+	includedirs ("src/Detour")
 	
-	files { "include/**", "src/**" }
+	files { "src/**" }
 	
 	includeBOOST()
 

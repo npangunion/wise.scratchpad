@@ -24,5 +24,9 @@ https://github.com/freakinpenguin/OpenTK-WPF
 동작하긴 한다. 
 
 
+# Xenko Porting 
+
+매우 가벼운 OpenTK를 사용하고 GLSL을 갖는 라이브러리를 만드는 작업을 진행한다. 
+필요한 연습을 충분히 짬짬이 진행한다. 
 
 
