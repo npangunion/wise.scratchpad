@@ -1,3 +1,4 @@
+#include <GLFW/glfw3.h>
 
 int main()
 {
@@ -10,4 +11,9 @@ int main()
 
 	// OpenGL, GLSL »ç¿ë 
 	// 
+
+	if (glfwInit())
+	{
+		glfwTerminate();
+	}
 }

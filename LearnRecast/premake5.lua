@@ -1,4 +1,5 @@
 local BOOST_HOME = os.getenv("BOOST_HOME")
+local GLFW_HOME = os.getenv("GLFW_HOME")
 
 workspace "LearnRecast"
 	-- We set the location of the files Premake will generate
@@ -38,18 +39,27 @@ workspace "LearnRecast"
 	targetdir ("build/bin/%{prj.name}/%{cfg.longname}")
     objdir ("build/obj/%{prj.name}/%{cfg.longname}")
 	
-function includeBOOST()
+function useBOOST()
 	includedirs (BOOST_HOME .. "/include")
 end	
+
+function useGLFW()
+	includedirs (GLFW_HOME .. "/include")
+	libdirs (GLFW_HOME .. "/lib-vc2019")
+	
+	links "glfw3"
+end
 
 project "GoRecast"
 	kind "ConsoleApp"
 
 	includedirs ("src/Detour")
+	includedirs ("src/imgui")
 	
 	files { "src/**" }
 	
-	includeBOOST()
+	useBOOST()
+	useGLFW()
 
 	
     
