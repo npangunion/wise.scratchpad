@@ -1,5 +1,9 @@
 local BOOST_HOME = os.getenv("BOOST_HOME")
 local GLFW_HOME = os.getenv("GLFW_HOME")
+local GLEW_HOME = os.getenv("GLEW_HOME")
+local GLM_HOME = os.getenv("GLM_HOME")
+local STB_HOME = os.getenv("STB_HOME")
+local ASSIMP_HOME = os.getenv("ASSIMP_HOME")
 
 workspace "LearnRecast"
 	-- We set the location of the files Premake will generate
@@ -50,16 +54,46 @@ function useGLFW()
 	links "glfw3"
 end
 
+function useGLEW()
+	includedirs (GLEW_HOME .. "/include")
+	libdirs (GLEW_HOME .. "/lib/Release/x64")
+	
+	links "glew32"
+end
+
+function useGLM()
+	includedirs (GLM_HOME .. "/glm")
+end
+
+function useSTB()
+	includedirs (STB_HOME)
+end
+
+function useASSIMP()
+	includedirs (ASSIMP_HOME .. "/include")
+
+	libdirs (ASSIMP_HOME .. "/lib")
+	
+	links "assimp-vc140-mt"
+end
+
 project "GoRecast"
 	kind "ConsoleApp"
 
 	includedirs ("src/Detour")
 	includedirs ("src/imgui")
+	includedirs ("src/")
 	
 	files { "src/**" }
 	
 	useBOOST()
 	useGLFW()
+	useGLEW()
+	useGLM()
+	useSTB()
+	useASSIMP()
+
+	links "opengl32"
 
 	
     
