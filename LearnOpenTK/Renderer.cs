@@ -87,9 +87,11 @@ namespace LearnOpenTK
 			GL.MatrixMode( MatrixMode.Modelview );
 			GL.LoadIdentity();
 
+			GL.Disable(EnableCap.Blend);
+
 			GL.Begin( PrimitiveType.Triangles );
 
-			GL.Color4( Color.Green );
+			GL.Color4( Color.Red);
 			GL.Vertex3( 0 , 300 , 0 );  // top of the triangle
 			GL.Vertex3( 0 , 0 , 0 );  // left-bottom of the triangle
 			GL.Vertex3( 300 , 0 , 0 );  // right-bottom of the triangle

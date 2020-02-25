@@ -24,9 +24,22 @@ https://github.com/freakinpenguin/OpenTK-WPF
 동작하긴 한다. 
 
 
-# Xenko Porting 
+# 작은 엔진 만들기 
 
-매우 가벼운 OpenTK를 사용하고 GLSL을 갖는 라이브러리를 만드는 작업을 진행한다. 
-필요한 연습을 충분히 짬짬이 진행한다. 
+딱 서버 프로그래머에 맞는 시각화 기능을 갖춘 엔진을 만든다. 
+별도 프로젝트로 정리하기 전에 먼저 충분히 연습을 한다. 
+
+## Vertex와 Mesh 
+
+- Position, Normal, Color, Uv
+- 애님 기능은 나중에 
+- 버퍼도 동적으로 여러 옵션 처리가 가능하도록 하는 건 나중에 
+
+## Shader
+
+
+## 카메라 
+
+
 
 

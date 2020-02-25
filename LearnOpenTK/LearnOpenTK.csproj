@@ -34,13 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\OpenTK\OpenTK.dll</HintPath>
+    <Reference Include="FreeImageNET">
+      <HintPath>.\FreeImageNET.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\OpenTK\OpenTK.GLControl.dll</HintPath>
+    <Reference Include="OpenTK, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>packages\OpenTK.3.1.0\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>packages\OpenTK.GLControl.3.1.0\lib\net20\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -64,6 +65,23 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Renderer.cs" />
+    <Compile Include="Render\Camera.cs" />
+    <Compile Include="Render\Frustum.cs" />
+    <Compile Include="Render\Material.cs" />
+    <Compile Include="Render\MaterialDiffuse.cs" />
+    <Compile Include="Render\MathUtil.cs" />
+    <Compile Include="Render\Mesh.cs" />
+    <Compile Include="Render\MeshRenderer.cs" />
+    <Compile Include="Render\Model.cs" />
+    <Compile Include="Render\Plane.cs" />
+    <Compile Include="Render\Scene.cs" />
+    <Compile Include="Render\Shader.cs" />
+    <Compile Include="Render\ShaderManager.cs" />
+    <Compile Include="Render\Shape.cs" />
+    <Compile Include="Render\Texture.cs" />
+    <Compile Include="Render\TextureManager.cs" />
+    <Compile Include="Render\Transform.cs" />
+    <Compile Include="Render\Vertex.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -96,6 +114,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -108,6 +127,7 @@
   <ItemGroup>
     <Resource Include="Automization.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

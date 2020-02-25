@@ -7,6 +7,7 @@
 
     using OpenTK;
     using OpenTK.Graphics;
+    using OpenTK.Graphics.OpenGL;
 
     using FramebufferAttachment = OpenTK.Graphics.OpenGL.FramebufferAttachment;
     using FramebufferErrorCode = OpenTK.Graphics.OpenGL.FramebufferErrorCode;
@@ -42,12 +43,15 @@
 
 		private byte[] readBuf;
 
+        private Render.Scene scene;
+
 		#endregion
 
 		#region Constructors and Destructors
 
-		public FrameBufferHandler()
+		public FrameBufferHandler(Render.Scene scene)
         {
+            this.scene = scene;
             this.loaded = false;
             this.size = Size.Empty;
             this.framebufferId = -1;
@@ -101,6 +105,12 @@
             {
                 this.size = framebuffersize;
                 this.CreateFramebuffer();
+
+                GL.Viewport(0, 0, framebuffersize.Width, framebuffersize.Height);
+                this.scene.Camera.ResizeViewport(framebuffersize.Width, framebuffersize.Height);
+                Matrix4 projMatrix = scene.Camera.ProjMatrix;
+                GL.MatrixMode(MatrixMode.Projection);
+                GL.LoadMatrix(ref projMatrix);
             }
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, this.framebufferId);
