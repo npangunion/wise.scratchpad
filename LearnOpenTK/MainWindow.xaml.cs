@@ -4,6 +4,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using LearnOpenTK.Render;
 
 using Size = System.Drawing.Size;
 
@@ -21,9 +22,9 @@ namespace LearnOpenTK
 
         private Renderer renderer;
 
-        private Render.Scene scene = new Render.Scene();
+        private Scene scene = new Scene();
 
-        private Render.MeshRenderer meshRenderer = new Render.MeshRenderer();
+        private MeshRenderer meshRenderer = new MeshRenderer();
 
         public Render.Scene Scene {  get { return scene; } }
 
@@ -34,7 +35,7 @@ namespace LearnOpenTK
             this.renderer = new Renderer(new Size(400, 400));
             this.framebufferHandler = new FrameBufferHandler(scene);
 
-            Render.CameraInfo info = new Render.CameraInfo();
+            CameraInfo info = new CameraInfo();
             info.Position = new Vector3(500.0f, -500.0f, 500.0f);
             info.LookAt = new Vector3(0, 0, 0);
             info.Fov = MathHelper.PiOver4;
@@ -44,6 +45,8 @@ namespace LearnOpenTK
             info.Height = 600;
 
             scene.SetupCamera(info);
+
+            CreateSampleCube();
 
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(1);
@@ -58,10 +61,9 @@ namespace LearnOpenTK
                 return;
             }
 
+            // Framebuffer 생성. Viewport 설정
 			this.framebufferHandler.Prepare( new Size( (int)this.imageContainer.ActualWidth , (int)this.imageContainer.ActualHeight ) );
 
-            GL.Enable(EnableCap.Multisample);
-            scene.Camera.Zoom(-0.1f);
             scene.Draw(meshRenderer);
 
             GL.Finish();
@@ -86,6 +88,28 @@ namespace LearnOpenTK
             }
 
             this.Render();
+        }
+
+        private void CreateSampleCube()
+        {
+            ShaderManager.Instance.Load(
+                new ShaderManager.ShaderConf() { 
+                    Name = "diffuse", 
+                    VsPath = "../../Assets/Shader/diffuse.vs", 
+                    FsPath = "../../Assets/Shader/diffuse.fs" 
+                });
+
+            var mat = new MaterialDiffuse() { 
+                ShaderProgram = "diffuse", 
+                Tex = "../../Assets/Tex/penguine.jpg" 
+            };
+
+            var mesh = Shape.CreateCube();
+
+            var sn = new Scene.Node() { Name = "sampleCube", Material = mat, Mesh = mesh };
+            scene.Add(sn);
+
+            sn.Transform.Position = new Vector3(0, 0, 0);
         }
     }
 }

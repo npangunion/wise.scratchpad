@@ -40,8 +40,8 @@ namespace LearnOpenTK.Render
         {
             var vs = LoadFile(sc.VsPath);
             var fs = LoadFile(sc.FsPath);
-            var shader = new Shader(sc.Name, vs, fs);
 
+            var shader = new Shader(sc.Name, vs, fs);
             shaders[sc.Name] = shader;
 
             return true;
@@ -74,7 +74,12 @@ namespace LearnOpenTK.Render
         private string LoadFile(string filename)
         {
             StreamReader reader = new StreamReader(filename);
-            return reader.ReadToEnd();
+
+            var r = reader.ReadToEnd();
+
+            reader.Close();
+
+            return r;
         }
     }
 }

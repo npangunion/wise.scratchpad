@@ -62,13 +62,11 @@ namespace LearnOpenTK.Render
         /// <param name="fs">Fragment Shader Source</param>
         private void CreateShaders(string vs, string fs)
         {
-            mVertexHandle = GL.CreateShader(ShaderType.VertexShader);
-            mFragmentHandle = GL.CreateShader(ShaderType.FragmentShader);
-
             int status_code;
             string info;
 
             // Compile Vertex Shader
+            mVertexHandle = GL.CreateShader(ShaderType.VertexShader);
             GL.ShaderSource(mVertexHandle, vs);
             GL.CompileShader(mVertexHandle);
             GL.GetShaderInfoLog(mVertexHandle, out info);
@@ -80,6 +78,7 @@ namespace LearnOpenTK.Render
             }
 
             // Compile Fragment Shader
+            mFragmentHandle = GL.CreateShader(ShaderType.FragmentShader);
             GL.ShaderSource(mFragmentHandle, fs);
             GL.CompileShader(mFragmentHandle);
             GL.GetShaderInfoLog(mFragmentHandle, out info);

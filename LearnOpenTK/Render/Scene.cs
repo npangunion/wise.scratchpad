@@ -15,16 +15,23 @@ namespace LearnOpenTK.Render
         {
             public string Name { get; set; }
 
-            public Transform Transform{ get; set; }
+            public Transform Transform{ get; private set; }
 
             public Mesh Mesh { get; set; }
 
             public Material Material { get; set; }
+
+            public Node()
+            {
+                Transform = new Transform();
+            }
         }
 
         Dictionary<string, Node> nodes = new Dictionary<string, Node>();
 
         public Camera Camera { get; private set; }
+
+        public int Tick { get { return Environment.TickCount; } }
 
         public void SetupCamera(CameraInfo info)
         {
@@ -45,8 +52,6 @@ namespace LearnOpenTK.Render
         {
             GL.ClearColor(Color.FromArgb(200, Color.LightGreen));
             GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
-
-            DrawSampleArcs(); 
 
             foreach ( var kv in nodes )
             {
@@ -94,10 +99,12 @@ namespace LearnOpenTK.Render
 
             Camera.LoadViewMatrix();
             GL.Translate(0, 0, -10);
+            GL.Rotate(Tick, Vector3.UnitZ);
             RenderArc(100, 120);
 
             Camera.LoadViewMatrix();
             GL.Translate(10, 10, -10);
+            GL.Rotate(-Tick, Vector3.UnitZ);
             RenderArc(200, 120);
         }
     } 
