@@ -35,10 +35,21 @@ https://github.com/freakinpenguin/OpenTK-WPF
 - 애님 기능은 나중에 
 - 버퍼도 동적으로 여러 옵션 처리가 가능하도록 하는 건 나중에 
 
-## Shader
+## Scene 
 
+- Node로 Mesh / Material 감싸기
 
 ## 카메라 
+
+- 기본 카메라 만듦 
+
+## Shader
+
+- 작업 중 
+- 이상한 오류 나와서 보는 중 
+- 왜 그럴까? 
+
+
 
 
 
