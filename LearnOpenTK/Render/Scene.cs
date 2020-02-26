@@ -59,6 +59,7 @@ namespace LearnOpenTK.Render
             }
 
             renderer.Render(Camera);
+            renderer.Clear();
         }
 
         public void RenderArc(float radius, float angle)

@@ -28,6 +28,9 @@ namespace LearnOpenTK
 
         private MeshRenderer meshRenderer = new MeshRenderer();
 
+        private Point mousePoint;
+
+
         public Render.Scene Scene {  get { return scene; } }
 
         public MainWindow()
@@ -128,6 +131,65 @@ namespace LearnOpenTK
                 sn.Transform.Scale = new Vector3(300, 300, 50);
                 sn.Transform.Update();
             }
+        }
+
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            switch ( e.Key )
+            {
+                case System.Windows.Input.Key.W:
+                    MoveForward();
+                    break;
+                case System.Windows.Input.Key.S:
+                    MoveBackward();
+                    break;
+                case System.Windows.Input.Key.A:
+                    MoveLeft();
+                    break;
+                case System.Windows.Input.Key.D:
+                    MoveRight();
+                    break;
+            }
+        }
+
+        private void MoveForward()
+        {
+            scene.Camera.Zoom(5);
+        }
+
+        private void MoveBackward()
+        {
+            scene.Camera.Zoom(-5);
+        }
+
+        private void MoveLeft()
+        {
+            scene.Camera.Move(new Vector3(-100, 0, 0));
+        }
+
+        private void MoveRight()
+        {
+            scene.Camera.Move(new Vector3(100, 0, 0));
+        }
+
+        private void Window_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if ( e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                var diff = e.GetPosition(this) - mousePoint;
+                scene.Camera.Rotate(new Vector2((float)diff.X/100, (float)diff.Y/100));
+                mousePoint = e.GetPosition(this);
+            }
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            mousePoint = e.GetPosition(this);
+        }
+
+        private void Window_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            scene.Camera.Zoom(e.Delta/10);
         }
     }
 }
