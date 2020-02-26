@@ -12,6 +12,8 @@ namespace LearnOpenTK
 {
     public partial class MainWindow : Window
     {
+        public static string HOME = @"C:\wisemountain\wise.scratchpad\LearnOpenTK";
+
         private WriteableBitmap backbuffer;
 
         private FrameBufferHandler framebufferHandler;
@@ -95,21 +97,37 @@ namespace LearnOpenTK
             ShaderManager.Instance.Load(
                 new ShaderManager.ShaderConf() { 
                     Name = "diffuse", 
-                    VsPath = "../../Assets/Shader/diffuse.vs", 
-                    FsPath = "../../Assets/Shader/diffuse.fs" 
+                    VsPath = $"{HOME}/Assets/Shader/diffuse.vert", 
+                    FsPath = $"{HOME}/Assets/Shader/diffuse.frag" 
                 });
 
             var mat = new MaterialDiffuse() { 
                 ShaderProgram = "diffuse", 
-                Tex = "../../Assets/Tex/penguine.jpg" 
+                Tex = $"{HOME}/Assets/Tex/penguine.jpg" 
             };
 
-            var mesh = Shape.CreateCube();
+            var meshCube = Shape.CreateCube();
+            var meshPlane = Shape.CreatePlane();
 
-            var sn = new Scene.Node() { Name = "sampleCube", Material = mat, Mesh = mesh };
-            scene.Add(sn);
+            // cube
+            {
+                var sn = new Scene.Node() { Name = "sampleCube", Material = mat, Mesh = meshCube };
+                //scene.Add(sn);
 
-            sn.Transform.Position = new Vector3(0, 0, 0);
+                sn.Transform.Position = new Vector3(0, 0, 0);
+                sn.Transform.Scale = new Vector3(100, 100, 50);
+                sn.Transform.Update();
+            }
+
+            // plane 
+            {
+                var sn = new Scene.Node() { Name = "samplePlane", Material = mat, Mesh = meshPlane};
+                scene.Add(sn);
+
+                sn.Transform.Position = new Vector3(0, 0, 20);
+                sn.Transform.Scale = new Vector3(300, 300, 50);
+                sn.Transform.Update();
+            }
         }
     }
 }

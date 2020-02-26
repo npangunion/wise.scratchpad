@@ -49,7 +49,7 @@ namespace LearnOpenTK.Render
 
         public bool Begin(string name)
         {
-            if (shaders.ContainsKey(current))
+            if (shaders.ContainsKey(name))
             {
                 current = name;
                 return shaders[current].Begin();

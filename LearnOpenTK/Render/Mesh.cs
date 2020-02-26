@@ -44,25 +44,11 @@ namespace LearnOpenTK.Render
                 throw new InvalidOperationException($"Insufficent indices. Tris:{triangleCount}, Indices:{Indices.Count}");
             }
 
+            CreateVbo();
+
             return true;
         }
 
-        public void CreateVbo()
-        {
-            // vbo
-            GL.GenBuffers(1, out mVBOHandle);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, mVBOHandle);
-            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(Vertices.Count * Vertex.SizeInBytes), Vertices.ToArray(), BufferUsageHint.StaticDraw); 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-            // indices
-            GL.GenBuffers(1, out mIndexBufferHandle);
-
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, mIndexBufferHandle);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, new IntPtr(Indices.Count * sizeof(uint)), Indices.ToArray(), BufferUsageHint.StaticDraw); 
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-        }
 
         public void BeginDraw()
         {
@@ -80,6 +66,23 @@ namespace LearnOpenTK.Render
         public void EndDraw()
         {
             UnbindVbo();
+        }
+
+        private void CreateVbo()
+        {
+            // vbo
+            GL.GenBuffers(1, out mVBOHandle);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, mVBOHandle);
+            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(Vertices.Count * Vertex.SizeInBytes), Vertices.ToArray(), BufferUsageHint.StaticDraw);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            // indices
+            GL.GenBuffers(1, out mIndexBufferHandle);
+
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, mIndexBufferHandle);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, new IntPtr(Indices.Count * sizeof(uint)), Indices.ToArray(), BufferUsageHint.StaticDraw);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
         private bool BindVbo()
