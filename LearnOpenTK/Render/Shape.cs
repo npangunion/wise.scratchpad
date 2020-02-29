@@ -9,7 +9,7 @@ namespace LearnOpenTK.Render
 {
     public class Shape
     {
-        public static Mesh CreateCube()
+        public static Mesh CreateCube(Vector4 color)
         {
             List<int> indices = new List<int>() {
                 0, 1, 2, 0, 2, 3,       //front
@@ -23,40 +23,40 @@ namespace LearnOpenTK.Render
             List<Vertex> verts = new List<Vertex>();
 
             // front
-            verts.Add( new Vertex() { Position = new Vector3(-1, -1, 1), Normal = new Vector3(), Color = new Vector4(0, 0, 1, 1), Uv = new Vector2() });
-            verts.Add( new Vertex() { Position = new Vector3(1, -1, 1), Normal = new Vector3(), Color = new Vector4(1, 0, 1, 1), Uv = new Vector2() });
-            verts.Add( new Vertex() { Position = new Vector3(1, 1, 1), Normal = new Vector3(), Color = new Vector4(1, 1, 1, 1), Uv = new Vector2() });
-            verts.Add( new Vertex() { Position = new Vector3(-1, 1, 1), Normal = new Vector3(), Color = new Vector4(0, 1, 1, 1), Uv = new Vector2() });
+            verts.Add( new Vertex() { Position = new Vector3(-1, -1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add( new Vertex() { Position = new Vector3(1, -1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add( new Vertex() { Position = new Vector3(1, 1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add( new Vertex() { Position = new Vector3(-1, 1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
 
             // right
-            verts.Add(new Vertex() { Position = new Vector3(1, 1, 1), Normal = new Vector3(), Color = new Vector4(1, 1, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(1, 1, -1), Normal = new Vector3(), Color = new Vector4(1, 0, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(1, -1, -1), Normal = new Vector3(), Color = new Vector4(1, 1, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(1, -1, 1), Normal = new Vector3(), Color = new Vector4(0, 1, 1, 1), Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(1, 1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(1, 1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(1, -1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(1, -1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
 
             // back 
-            verts.Add(new Vertex() { Position = new Vector3(-1, -1, -1), Normal = new Vector3(), Color = new Vector4(1, 1, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(1, -1, -1), Normal = new Vector3(), Color = new Vector4(1, 0, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(1, 1, -1), Normal = new Vector3(), Color = new Vector4(1, 1, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(-1, 1, -1), Normal = new Vector3(), Color = new Vector4(0, 1, 1, 1), Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(-1, -1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(1, -1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(1, 1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(-1, 1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
 
             // left
-            verts.Add(new Vertex() { Position = new Vector3(-1, -1, -1), Normal = new Vector3(), Color = new Vector4(1, 1, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(-1, -1, 1), Normal = new Vector3(), Color = new Vector4(1, 0, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(-1, 1, 1), Normal = new Vector3(), Color = new Vector4(1, 1, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(-1, 1, -1), Normal = new Vector3(), Color = new Vector4(0, 1, 1, 1), Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(-1, -1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(-1, -1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(-1, 1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(-1, 1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
 
             // upper
-            verts.Add(new Vertex() { Position = new Vector3(1, 1, 1), Normal = new Vector3(), Color = new Vector4(1, 1, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(-1, 1, 1), Normal = new Vector3(), Color = new Vector4(1, 0, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(-1, 1, -1), Normal = new Vector3(), Color = new Vector4(1, 1, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(1, 1, -1), Normal = new Vector3(), Color = new Vector4(0, 1, 1, 1), Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(1, 1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(-1, 1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(-1, 1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(1, 1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
 
             // bottom 
-            verts.Add(new Vertex() { Position = new Vector3(-1, -1, -1), Normal = new Vector3(), Color = new Vector4(1, 1, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(1, -1, -1), Normal = new Vector3(), Color = new Vector4(1, 0, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(1, -1, 1), Normal = new Vector3(), Color = new Vector4(1, 1, 1, 1), Uv = new Vector2() });
-            verts.Add(new Vertex() { Position = new Vector3(-1, -1, 1), Normal = new Vector3(), Color = new Vector4(0, 1, 1, 1), Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(-1, -1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(1, -1, -1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(1, -1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
+            verts.Add(new Vertex() { Position = new Vector3(-1, -1, 1), Normal = new Vector3(), Color = color, Uv = new Vector2() });
 
             var mesh = new Mesh();
             mesh.Load(verts, indices, 12);

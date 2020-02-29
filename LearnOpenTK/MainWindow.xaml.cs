@@ -12,7 +12,7 @@ namespace LearnOpenTK
 {
     public partial class MainWindow : Window
     {
-        public static string HOME = @"C:\wisemountain\wise.scratchpad\LearnOpenTK";
+        public static string HOME = @"E:\wisemountain\wise.scratchpad\LearnOpenTK";
 
         private WriteableBitmap backbuffer;
 
@@ -109,16 +109,16 @@ namespace LearnOpenTK
                 Tex = $"{HOME}/Assets/Tex/penguine.jpg" 
             };
 
-            var meshCube = Shape.CreateCube();
+            var meshCube = Shape.CreateCube(new Vector4(1, 0, 0, 1));
             var meshPlane = Shape.CreatePlane();
 
             // cube
             {
                 var sn = new Scene.Node() { Name = "sampleCube", Material = mat, Mesh = meshCube };
-                //scene.Add(sn);
+                scene.Add(sn);
 
                 sn.Transform.Position = new Vector3(0, 0, 0);
-                sn.Transform.Scale = new Vector3(100, 100, 50);
+                sn.Transform.Scale = new Vector3(10, 10, 10);
                 sn.Transform.Update();
             }
 
@@ -128,7 +128,7 @@ namespace LearnOpenTK
                 scene.Add(sn);
 
                 sn.Transform.Position = new Vector3(0, 0, 20);
-                sn.Transform.Scale = new Vector3(300, 300, 50);
+                sn.Transform.Scale = new Vector3(10, 10, 10);
                 sn.Transform.Update();
             }
         }
