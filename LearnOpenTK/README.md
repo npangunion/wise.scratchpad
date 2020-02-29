@@ -79,12 +79,9 @@ Projection / View를 역으로 변환해서 원래 3D 공간 상의 위치를 �
 
 
 
+## Bullet 테스트 
 
-
-
-
-
-
+LearnOpenTK에 BulletSharp을 포함하여 익힌다. 
 
 
 
