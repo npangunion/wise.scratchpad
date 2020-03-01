@@ -41,3 +41,5 @@ obj
 Debug
 Release
 /LearnRecast/generated
+/LearnGeom/generated
+/LearnGeom/build
