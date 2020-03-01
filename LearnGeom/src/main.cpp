@@ -11,7 +11,6 @@
 
 // Include glfw3.h after our OpenGL definitions
 #include <GLFW/glfw3.h>
-#include <Scene/Scene.hpp>
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -43,7 +42,7 @@ int main(int, char**)
 #endif
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Computational Geometry", NULL, NULL);
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
@@ -69,8 +68,6 @@ int main(int, char**)
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     io.Fonts->AddFontFromFileTTF("../src/imgui/misc/fonts/DroidSans.ttf", 16.0f);
-
-    scene::Scene scene;
 
     // Our state
     bool show_demo_window = false;
@@ -138,8 +135,6 @@ int main(int, char**)
         glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        scene.Draw();
 
         glfwSwapBuffers(window);
     }

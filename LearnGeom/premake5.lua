@@ -80,8 +80,9 @@ end
 project "LearnGeom"
 	kind "ConsoleApp"
 
-	includedirs ("src/wykobi")
 	includedirs ("src")
+	includedirs ("src/wykobi")
+	includedirs ("src/imgui")
 	
 	files { "src/**" }
 
@@ -93,5 +94,8 @@ project "LearnGeom"
 	
 	links "opengl32"
 
+	useBOOST()
+	useGLFW()
+	useGLEW()
 	
     
