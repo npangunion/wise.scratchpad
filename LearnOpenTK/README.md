@@ -102,8 +102,9 @@ LearnOpenTK에 BulletSharp을 포함하여 익힌다.
 
 ## 피킹 
 
-TriangleMesh로 처리해보려 했는데 잘 안 된다. 
-
+TriangleMesh
+- 정적으로 처리. 미리 버텍스 변환해서 삼각형들 추가해야 함 
+- 뷰포트 크기를 정확하게 얻어서 Unproject 함수를 사용하면 됨 
 
 
 
