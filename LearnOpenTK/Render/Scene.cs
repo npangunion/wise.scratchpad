@@ -33,6 +33,8 @@ namespace LearnOpenTK.Render
 
         public int Tick { get { return Environment.TickCount; } }
 
+        public Dictionary<string, Node>.KeyCollection Nodes { get { return nodes.Keys;  } }
+
         public void SetupCamera(CameraInfo info)
         {
             Camera = new Camera(info);
@@ -48,9 +50,19 @@ namespace LearnOpenTK.Render
             nodes.Remove(name);
         }
 
+        public Node Get(string name)
+        {
+            if ( nodes.ContainsKey(name))
+            {
+                return nodes[name];
+            }
+
+            return null;
+        }
+
         public void Draw(MeshRenderer renderer)
         {
-            GL.ClearColor(Color.FromArgb(200, Color.LightGreen));
+            GL.ClearColor(Color.FromArgb(200, Color.Black));
             GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
             foreach ( var kv in nodes )

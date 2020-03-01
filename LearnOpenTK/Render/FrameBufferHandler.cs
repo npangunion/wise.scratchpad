@@ -45,6 +45,8 @@
 
         private Render.Scene scene;
 
+        public Size Size { get { return size; } }
+
 		#endregion
 
 		#region Constructors and Destructors

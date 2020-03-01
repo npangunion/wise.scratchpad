@@ -5,11 +5,16 @@
         Height="711.2" Width="883" Background="#FFFFABAB" 
         KeyDown="Window_KeyDown" 
         MouseMove="Window_MouseMove" MouseLeftButtonDown="Window_MouseLeftButtonDown" MouseWheel="Window_MouseWheel">
-    <Grid>
-        <Image Source="Automization.png" Stretch="Fill" />
+    <DockPanel>
+        <Grid DockPanel.Dock="Top">
+            <RichTextBox x:Name="log" TextBlock.FontFamily="Consolas" ></RichTextBox>
+        </Grid>
 
-        <Grid x:Name="imageContainer">
-            <Image x:Name="image" Source="Automization.png" Stretch="None">
+        <Grid DockPanel.Dock="Bottom">
+            <Image Source="Automization.png" Stretch="Fill" />
+
+            <Grid x:Name="imageContainer">
+                <Image x:Name="image" Source="Automization.png" Stretch="None">
                 <Image.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="MenuItem #1" />
@@ -19,6 +24,7 @@
                     </ContextMenu>
                 </Image.ContextMenu>
             </Image>
+            </Grid>
         </Grid>
-    </Grid>
+    </DockPanel>
 </Window>

@@ -52,22 +52,6 @@ https://github.com/freakinpenguin/O##penTK-WPF
 
 ## Picking 
 
-```c++
-// Function that takes mouse position on screen and return ray in world coords
-glm::vec3 PhysicsEngine::GetRayFromMouse()
-{
-	glm::vec2 ray_nds = glm::vec2(mouseX, mouseY);
-	glm::vec4 ray_clip = glm::vec4(ray_nds.x, ray_nds.y, -1.0f, 1.0f);
-	glm::mat4 invProjMat = glm::inverse(m_Camera.GetProjectionMatrix());
-	glm::vec4 eyeCoords = invProjMat * ray_clip;
-	eyeCoords = glm::vec4(eyeCoords.x, eyeCoords.y, -1.0f, 0.0f);
-	glm::mat4 invViewMat = glm::inverse(m_Camera.ViewMatrix());
-	glm::vec4 rayWorld = invViewMat * eyeCoords;
-	glm::vec3 rayDirection = glm::normalize(glm::vec3(rayWorld));
-
-	return rayDirection;
-}
-```
 
 마우스 위치로 가는 카메라 위치에서 시작하는 레이를 만든다. 
 Projection / View를 역으로 변환해서 원래 3D 공간 상의 위치를 찾는다. 
@@ -77,11 +61,48 @@ Projection / View를 역으로 변환해서 원래 3D 공간 상의 위치를 �
 이후에는 월드 공간 상의 오브젝트와 체크를 하면 된다. 
 매시가 크다면 미리 빠르게 처리 가능한 단위로 분할해 두지 않으면 느릴 수 있다. 
 
+```c#
+private Vector3 UnProjectPos(Vector3 mouse, Matrix4 projection, Matrix4 view, Size viewport)
+{
+	Vector4 vec;
+
+	vec.X = 2.0f * mouse.X / (float)viewport.Width - 1;
+	vec.Y = -(2.0f * mouse.Y / (float)viewport.Height - 1);
+	vec.Z = mouse.Z;
+	vec.W = 1.0f;
+
+	Matrix4 viewInv = Matrix4.Invert(view);
+	Matrix4 projInv = Matrix4.Invert(projection);
+
+	Vector4.Transform(ref vec, ref projInv, out vec);
+	Vector4.Transform(ref vec, ref viewInv, out vec);
+
+	if (vec.W > 0.000001f || vec.W < -0.000001f)
+	{
+		vec.X /= vec.W;
+		vec.Y /= vec.W;
+		vec.Z /= vec.W;
+	}
+
+	return vec.Xyz;
+} 
+```		
+
+NDC 장치 좌표로 마우스 좌표를 옮긴다. 다 그려진 후이기 때문에 이 좌표를 사용하여 
+역변환을 projInv, viewInv에 대해 진행하면 월드 좌표가 나온다. 
+
+W는 깊이 성분이므로 이 값으로 위치가 주어진다. 
+
+UnPorjectPos(x, y, 0)이 시작 점이고 UnProjectPos(x, y, 1)이 끝점이다. 
 
 
-## Bullet 테스트 
+# Bullet 테스트 
 
 LearnOpenTK에 BulletSharp을 포함하여 익힌다. 
+
+## 피킹 
+
+TriangleMesh로 처리해보려 했는데 잘 안 된다. 
 
 
 
