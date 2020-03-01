@@ -109,7 +109,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Bullet\CollisionWorld.cs" />
+    <Compile Include="Bullet\LearnTrianglePick.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="Render\Camera.cs" />
     <Compile Include="Render\Frustum.cs" />

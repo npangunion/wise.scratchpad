@@ -81,7 +81,25 @@ Projection / View를 역으로 변환해서 원래 3D 공간 상의 위치를 �
 
 ## Bullet 테스트 
 
-LearnOpenTK에 BulletSharp을 포함하여 익힌다. 
+BulletSharp으로 진행. 
+ 
+- Picking
+- Collision Query
+- json scene 
+
+
+### 따라하기 
+
+http://www.opengl-tutorial.org/kr/miscellaneous/clicking-on-objects/picking-with-a-physics-library/
+
+
+
+
+
+
+
+
+
 
 
 
