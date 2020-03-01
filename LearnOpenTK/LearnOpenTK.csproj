@@ -109,7 +109,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Bullet\LearnTrianglePick.cs" />
+    <Compile Include="Bullet\RayTestSpace.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="Render\Camera.cs" />
     <Compile Include="Render\Frustum.cs" />
@@ -142,7 +142,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FrameBufferHandler.cs" />
+    <Compile Include="Render\FrameBufferHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

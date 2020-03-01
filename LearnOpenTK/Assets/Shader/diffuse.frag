@@ -9,5 +9,6 @@ in Vertex {
 
 void main()
 {
-    gl_FragColor = texture(tex1, vert.vTex1);
+    // gl_FragColor = texture(tex1, vert.vTex1);
+    gl_FragColor = vert.vColor;
 }
