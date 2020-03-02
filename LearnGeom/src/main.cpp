@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "wykobi_graphics_opengl.hpp"
 #include <stdio.h>
 
 // Include glfw3.h after our OpenGL definitions
@@ -47,6 +48,8 @@ int main(int, char**)
         return 1;
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
+
+    wykobi::wykobi_graphics_opengl<float> graphics(1280, 720, wykobi::DrawingMode::eSolid);
 
     int err = glewInit();
 
@@ -135,6 +138,28 @@ int main(int, char**)
         glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        wykobi::point2d<float> center;
+        center.x = 0; 
+        center.y = 0;
+
+        // camera setup
+
+        // TODO: GLM 사용. 
+        // TODO: FBO 사용. 
+
+        float w = display_w;
+        float h = display_h;
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(-(float)w / h, (float)w / h, -1.0, 1.0);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        graphics.set_color(0, 255, 0);
+        graphics.draw_circle(center, 0.1);
 
         glfwSwapBuffers(window);
     }

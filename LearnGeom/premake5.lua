@@ -93,6 +93,7 @@ project "LearnGeom"
 	}
 	
 	links "opengl32"
+	links "glu32"
 
 	useBOOST()
 	useGLFW()
