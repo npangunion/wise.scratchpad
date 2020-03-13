@@ -37,6 +37,9 @@ namespace LearnHttpServer
                 // First, we will configure our web server by adding Modules.
                 .WithLocalSessionManager();
 
+            // WebApiModule에 WebApiController롤 RegisterController로 추가 해서 등록 
+            // 문자열 등도 잘 돌려줌. 
+
             // Listen for state changes.
             // server.StateChanged += (s, e) => $"WebServer New State - {e.NewState}".Info();
 
