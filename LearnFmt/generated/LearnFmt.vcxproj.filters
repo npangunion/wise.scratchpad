@@ -1,31 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="..">
-      <UniqueIdentifier>{61705900-4DFC-870B-B6AA-880BA255880B}</UniqueIdentifier>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\pch.hpp">
-      <Filter>..</Filter>
+    <ClInclude Include="..\src\pch.hpp">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\main.cpp">
-      <Filter>..</Filter>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\pch.cpp">
-      <Filter>..</Filter>
+    <ClCompile Include="..\src\pch.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\test_fmt_01.cpp">
-      <Filter>..</Filter>
+    <ClCompile Include="..\src\test_fmt_01.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\premake5.lua">
-      <Filter>..</Filter>
-    </None>
-    <None Include="LearnFmt.sln" />
-    <None Include="LearnFmt.vcxproj" />
   </ItemGroup>
 </Project>

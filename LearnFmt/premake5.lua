@@ -35,6 +35,7 @@ project "LearnFmt"
 	kind "ConsoleApp"
 
 	files "src/**"
+	vpaths { ["src"] = { "src/**"} }
 
 	pchheader "pch.hpp"
 	pchsource "src/pch.cpp"
