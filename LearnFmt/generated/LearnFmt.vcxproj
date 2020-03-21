@@ -99,9 +99,11 @@
     <ClCompile Include="..\src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\src\test_decltype.cpp" />
     <ClCompile Include="..\src\test_fmt_01.cpp" />
+    <ClCompile Include="..\src\test_fmt_methods.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project> 
+</Project>

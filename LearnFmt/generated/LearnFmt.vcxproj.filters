@@ -17,7 +17,13 @@
     <ClCompile Include="..\src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\test_decltype.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\test_fmt_01.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\test_fmt_methods.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
