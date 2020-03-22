@@ -1,4 +1,4 @@
-#include <pch.hpp>
+ï»¿#include <pch.hpp>
 #include <catch.hpp>
 #include <spdlog/spdlog.h>
 #include <iostream>
@@ -27,14 +27,14 @@ TEST_CASE("fmt method", "learnfmt")
 	{
 		std::string s = fmt::format("Number: {}", 3);
 
-		// ´ë´ÜÇÑ »ç¶÷µéÀÌ ¸¹´Ù. 
-		// - string_view´Â À¯Æ¿. c++17ºÎÅÍ Ç¥ÁØ
-		// - vformat, format_to¿Í °°ÀÌ ÁøÇàµÈ´Ù. 
-		// - arg¸¦ ÀúÀåÇÑ °÷¿¡ Å¸ÀÙ Ãß·ĞÀ¸·Î ¸î °¡Áö Á¤º¸¸¦ Æ÷ÇÔÇÑ´Ù. 
-		// - ³ª¸ÓÁö´Â ¹®ÀÚ¿­ ÆÄ½Ì°ú °ª ±³Ã¼ÀÌ´Ù. 
-		// - format_arg_store¿¡ °ªµé ÀúÀå
-		//   - ¿©±â°¡ MPLÀÇ ÇÙ½ÉÀÌ´Ù. 
-		// fmt´Â std::format()À¸·Î c++20¿¡¼­ Ç¥ÁØÈ­ ÀıÂ÷¸¦ ¹â°í ÀÖ´Ù. 
+		// ëŒ€ë‹¨í•œ ì‚¬ëŒë“¤ì´ ë§ë‹¤. 
+		// - string_viewëŠ” ìœ í‹¸. c++17ë¶€í„° í‘œì¤€
+		// - vformat, format_toì™€ ê°™ì´ ì§„í–‰ëœë‹¤. 
+		// - argë¥¼ ì €ì¥í•œ ê³³ì— íƒ€ì ì¶”ë¡ ìœ¼ë¡œ ëª‡ ê°€ì§€ ì •ë³´ë¥¼ í¬í•¨í•œë‹¤. 
+		// - ë‚˜ë¨¸ì§€ëŠ” ë¬¸ìì—´ íŒŒì‹±ê³¼ ê°’ êµì²´ì´ë‹¤. 
+		// - format_arg_storeì— ê°’ë“¤ ì €ì¥
+		//   - ì—¬ê¸°ê°€ MPLì˜ í•µì‹¬ì´ë‹¤. 
+		// fmtëŠ” std::format()ìœ¼ë¡œ c++20ì—ì„œ í‘œì¤€í™” ì ˆì°¨ë¥¼ ë°Ÿê³  ìˆë‹¤. 
 	}
 
 	SECTION("method1. variadic template")
@@ -44,7 +44,7 @@ TEST_CASE("fmt method", "learnfmt")
 		// print(1, ...args)
 		// print(2, ...args)
 		// print(3)
-		// Àç±Í¿Í base case
+		// ì¬ê·€ì™€ base case
 	}
 
 	SECTION("method2. folding")
