@@ -78,6 +78,7 @@ void tutorial()
 		auto third_item = inv->Get(2);
 
 		auto weapons = monster->weapons(); // A pointer to a `flatbuffers::Vector<>`.
+			
 		auto weapon_len = weapons->size();
 		auto second_weapon_name = weapons->Get(1)->name()->str();
 		auto second_weapon_damage = weapons->Get(1)->damage();
