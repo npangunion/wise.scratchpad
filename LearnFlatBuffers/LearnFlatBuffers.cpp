@@ -64,6 +64,9 @@ void tutorial()
 	{
 		auto monster = GetMonster(vbuf.data());
 
+		Verifier verifier(vbuf.data(), size);
+		monster->Verify(verifier);
+
 		auto hp = monster->hp();
 		auto mana = monster->mana();
 		auto name = monster->name()->c_str();
@@ -123,7 +126,7 @@ void object_api()
 
 int main()
 {
-	object_api();
+	tutorial();
 
 	return 0;
 }

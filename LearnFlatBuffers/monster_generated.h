@@ -27,7 +27,7 @@ enum Color {
   Color_MAX = Color_Blue
 };
 
-inline const Color (&EnumValuesColor())[3] {
+inline const Color ( &EnumValuesColor() ) [3] {
   static const Color values[] = {
     Color_Red,
     Color_Green,
