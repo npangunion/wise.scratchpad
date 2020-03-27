@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#define FLATBUFFERS_TRACK_VERIFIER_BUFFER_SIZE
+
 #ifndef FLATBUFFERS_H_
 #define FLATBUFFERS_H_
 

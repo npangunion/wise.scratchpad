@@ -67,6 +67,11 @@ void tutorial()
 		Verifier verifier(vbuf.data(), size);
 		monster->Verify(verifier);
 
+		// https://github.com/google/flatbuffers/pull/3905
+		// - GetComputedSize() w/ FLATBUFFERS_TRACK_VERIFIER_BUFFER_SIZE
+
+		auto cs = verifier.GetComputedSize();
+
 		auto hp = monster->hp();
 		auto mana = monster->mana();
 		auto name = monster->name()->c_str();
