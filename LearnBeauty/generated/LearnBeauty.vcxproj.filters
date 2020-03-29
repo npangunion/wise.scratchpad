@@ -23,5 +23,8 @@
     <ClCompile Include="..\src\test_string.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\test_assembly.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
