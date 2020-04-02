@@ -6,9 +6,13 @@ namespace_decl: NAMESPACE IDENTIFIER ( DOT IDENTIFIER )* SEMICOLON
 
 attribute_decl: ATTRIBUTE STRING_LITERAL SEMICOLON
 
-type_decl: ( TABLE | STRUCT ) type_decl_name metadata OPEN_BLOCK field_decl* CLOSE_BLOCK
+type_decl: ( TABLE | STRUCT ) type_decl_name metadata type_field_open field_decl* type_field_close
+type_field_open: OPEN_BLOCK
+type_field_close: CLOSE_BLOCK
 
-enum_decl: ( ENUM | UNION ) type_decl_name [ COLON type ] metadata OPEN_BLOCK [ enumval_decl ( COMMA enumval_decl )* ] CLOSE_BLOCK
+enum_decl: ( ENUM | UNION ) type_decl_name [ COLON type ] metadata enum_field_open [ enumval_decl ( COMMA enumval_decl )* ] enum_field_close
+enum_field_open: OPEN_BLOCK
+enum_field_close: CLOSE_BLOCK
 
 root_decl: ROOT_TYPE IDENTIFIER SEMICOLON
 
@@ -52,8 +56,8 @@ ATTRIBUTE:          "required" | "deprecated"
 ROOT_TYPE:          "root_type"
 TABLE:              "table"
 STRUCT:             "struct"
-OPEN_BLOCK:         "{"
-CLOSE_BLOCK:        "}"
+OPEN_BLOCK:         "{"         
+CLOSE_BLOCK:        "}"         
 ENUM:               "enum"
 UNION:              "union"
 COLON:              ":"

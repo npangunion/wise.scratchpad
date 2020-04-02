@@ -124,16 +124,54 @@ terminal부터 상위 규칙으로 차례로 하나씩 확인하면서 learn/fla
 - vector_type 추가 
   - 의미를 부여하기 편하도록 문법을 개선한다. 
 
+## 파스트리 
 
+ Tree(
+     type_decl, 
+     [Token(TABLE, 'table'), 
+        Tree(type_decl_name, [Token(IDENTIFIER, 'Weapon')]), 
+        Tree(metadata, []), 
+        Token(OPEN_BLOCK, '{'), 
+            Tree(field_decl, 
+                [Tree(field_name, [Token(IDENTIFIER, 'name')]), 
+                    Token(COLON, ':'), 
+                    Tree(type, 
+                        [Tree(builtin_type, [Token(STRING, 'string')])]), 
+                        Token(SEMICOLON, ';')]), 
+            Tree(field_decl, 
+                [Tree(field_name, [Token(IDENTIFIER, 'damage')]), 
+                    Token(COLON, ':'), 
+                    Tree(type, 
+                        [Tree(builtin_type, [Token(SHORT, 'short')])]), 
+                        Token(SEMICOLON, ';')]), 
+        Token(CLOSE_BLOCK, '}')
+     ]
+)
 
+트리 구조로 되어 있다. Tree/Token을 순회하면서 의미를 붙여야 한다. 
 
+## Transformer
 
+lark에서 semantic analysis를 진행하고 semantic action을 실행하는 구조가 transformer이다. 
 
+```python
+class MonsterTree(Transformer):
 
+    def include_decl(self, s):
+        for c in s:
+            print("include => ", c)
 
+    def namespace_decl(self, s):
+        for c in s:
+            print("type: ", c.type, "value: ", c.value, "\n")
 
+    def type_decl(self, s): 
+        for c in s:
+            if type(c) is Tree:
+                print("tree: ", c.data, "\n")
+            elif type(c) is Token:
+                print("token: ", c.value, "\n")
+```
 
-
-
-
+Transformer는 tree visitor이다. 여기에 문맥(상태)을 기록하고 조건에 따라 실행(semantic action)한다. 
 
