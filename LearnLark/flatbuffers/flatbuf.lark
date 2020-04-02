@@ -1,14 +1,4 @@
-start: include_decl*
-    ( namespace_decl
-    | type_decl
-    | enum_decl
-    | root_decl
-    | file_extension_decl
-    | file_identifier_decl
-    | attribute_decl
-    )*
-
-private item_: COMMENT
+start: include_decl* ( namespace_decl | type_decl | enum_decl | root_decl | attribute_decl )*
 
 include_decl: INCLUDE STRING_LITERAL SEMICOLON
 
@@ -20,35 +10,39 @@ type_decl: ( TABLE | STRUCT ) type_decl_name metadata OPEN_BLOCK field_decl* CLO
 
 enum_decl: ( ENUM | UNION ) type_decl_name [ COLON type ] metadata OPEN_BLOCK [ enumval_decl ( COMMA enumval_decl )* ] CLOSE_BLOCK
 
-type_decl_name: IDENTIFIER
-
 root_decl: ROOT_TYPE IDENTIFIER SEMICOLON
 
-field_decl: field_name COLON type [ EQUAL INTEGER_LITERAL ] SEMICOLON
+type_decl_name: IDENTIFIER
+
+field_decl: field_name COLON type [ EQUAL scalar ] [ optional ] SEMICOLON
 
 field_name: IDENTIFIER
-
-builtin_type: BOOL | BYTE | UBYTE | SHORT | USHORT | INT | UINT | FLOAT | LONG | ULONG | DOUBLE | STRING
-
-type: builtin_type | OPEN_BRACE type CLOSE_BRACE | custom_type
-
-custom_type: IDENTIFIER
-
-enumval_decl: IDENTIFIER [ EQUAL INTEGER_LITERAL ]
 
 metadata: [ OPEN_PARENTHESIS [ metadata_part ( COMMA metadata_part ) * ] CLOSE_PARENTHESIS ]
 
 metadata_part: IDENTIFIER [ COLON single_value ]
 
-scalar: INTEGER_LITERAL | FLOAT_LITERAL | TRUE | FALSE
+builtin_type: BOOL | BYTE | UBYTE | SHORT | USHORT | INT | UINT | FLOAT | LONG | ULONG | DOUBLE | STRING
+
+type: builtin_type | vector_type | custom_type 
+
+vector_type: OPEN_BRACE type CLOSE_BRACE
+
+custom_type: IDENTIFIER
+
+enumval_decl: IDENTIFIER [ EQUAL INTEGER_LITERAL ]
 
 object:  [ object_part ( COMMA object_part ) * ]
 
 object_part: IDENTIFIER COLON value
 
+scalar: INTEGER_LITERAL | FLOAT_LITERAL | IDENTIFIER | TRUE | FALSE
+
 single_value: scalar | STRING_LITERAL
 
 value: single_value | object | OPEN_BRACE [ value ( COMMA value ) * ] CLOSE_BRACE
+
+optional: OPEN_PARENTHESIS ATTRIBUTE CLOSE_PARENTHESIS 
 
 INCLUDE:            "include"
 SEMICOLON:          ";"
@@ -83,15 +77,14 @@ OPEN_PARENTHESIS:   "("
 CLOSE_PARENTHESIS:  ")"
 TRUE:               "true"
 FALSE:              "false"
-STRING_LITERAL:     (".*")
-INTEGER_LITERAL:    ([0-9]+)
-FLOAT_LITERNAL:     ([0-9]*(\.[0-9]+)?([eE][+-]?[0-9]+)?)
-IDENTIFIER:         ([a-zA-Z_](\.[a-zA-Z_0-9]|[a-zA-Z_0-9])*)
-WHITESPACE:         ([ \t\r\n]*)
-COMMENT:            ("//"[^\n]*)
+COMMENT:            /\/\/(.*\n)/
 
-%import common.STRING -> STRING_LITERAL 
-%import common.INT -> INTGER_LITERAL 
+%import common.INT      -> INTEGER_LITERAL 
+%import common.WS       -> WHITESPACE
+%import common.FLOAT    -> FLOAT_LITERAL
+%import common.CNAME    -> IDENTIFIER
+%import common.ESCAPED_STRING -> STRING_LITERAL
 
 %ignore WHITESPACE
-%ignroe COMMENT
+%ignore COMMENT
+
