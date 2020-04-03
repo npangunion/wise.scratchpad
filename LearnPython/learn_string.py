@@ -27,3 +27,7 @@ print(rs)
 
 # {{ }}로 중괄호를 쓰는 것도 c++과 같다. 
 
+
+for c in name:
+    print(c, "\n")
+    print(c.upper(), "\n")
