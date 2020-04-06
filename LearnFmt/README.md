@@ -11,7 +11,7 @@ inline std::basic_string<Char> format(const S& format_str, Args&&... args) {
 }
 ```
 
-char_t<S>는 무엇?
+`char_t<S>`는 무엇?
 
 ```c++
 /** String's character type. */
