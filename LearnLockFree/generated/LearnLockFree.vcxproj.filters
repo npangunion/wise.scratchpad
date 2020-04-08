@@ -9,6 +9,9 @@
     <ClInclude Include="..\src\pch.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\spinlock.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
