@@ -2,7 +2,7 @@ local SPDLOG_HOME = os.getenv("SPDLOG_HOME")
 local CATCH_HOME = os.getenv("CATCH_HOME")
 local CATCH_INCLUDE_DIR = CATCH_HOME .. "/single_include/catch2"
 
-workspace "LearnLockFree"
+workspace "LearnSyncContainer"
 	location "generated"
 	language "C++"
 	architecture "x86_64"
@@ -31,7 +31,7 @@ function includeCatch()
 end
 
 
-project "LearnLockFree"
+project "LearnSyncContainer"
 	kind "ConsoleApp"
 
 	files "src/**"

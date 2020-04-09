@@ -18,7 +18,7 @@ namespace {
 
 struct pc
 {
-	int id = 0; 
+	int id = 0;
 	std::size_t index = 0;
 	bool removed = false;
 
@@ -34,8 +34,8 @@ class sector
 {
 	using pc_map = std::unordered_map<int, pc*>;
 	using vec = std::vector<pc*>;
-	
-public: 
+
+public:
 
 	void insert(pc* _pc)
 	{
@@ -62,7 +62,15 @@ public:
 			pcs_.erase(_pc->id);
 		}
 
-		purge();
+		// purge
+		{
+			std::unique_lock ul(lock_sync_);
+
+			cv_.erase(std::find_if(cv_.begin(), cv_.end(),
+				[](pc* _pc) {
+					return _pc->removed;
+				}), cv_.end());
+		}
 	}
 
 	void copy_sync_list(vec& dst)
@@ -84,25 +92,20 @@ private:
 		{
 			purge_tick_.reset();
 
-			std::unique_lock ul(lock_sync_);
-
-			cv_.erase(std::find_if(cv_.begin(), cv_.end(),
-				[](pc* _pc) {
-					return _pc->removed;
-				}), cv_.end());
+		
 		}
 	}
 
-private: 
+private:
 	util::spinlock lock_pc_;
-	std::shared_mutex lock_sync_; // read write lock
+	std::shared_mutex lock_sync_; // read write lock (rwspinlock이라고 봐도 되고, 스핀락을 써도 된다)
 	pc_map pcs_;
 	vec cv_;
 	util::simple_tick purge_tick_;
 };
 
 void sleep(std::size_t msec)
-{	
+{
 	std::this_thread::sleep_for(std::chrono::milliseconds(msec));
 }
 
@@ -123,7 +126,7 @@ TEST_CASE("concurrent vector", "sync")
 			s1.insert(new pc(i + 1));
 		}
 
-		std::thread([&s1, &stop]() 
+		std::thread([&s1, &stop]()
 			{
 				while (!stop) {
 					pc* pc1 = new pc(500);
@@ -134,9 +137,9 @@ TEST_CASE("concurrent vector", "sync")
 
 		std::vector<pc*> lst;
 
-		std::thread([&s1, &stop, &lst]() 
+		std::thread([&s1, &stop, &lst]()
 			{
-				while (!stop) 
+				while (!stop)
 				{
 					lst.clear();
 					s1.copy_sync_list(lst);
@@ -151,19 +154,11 @@ TEST_CASE("concurrent vector", "sync")
 				}
 			}).swap(s);
 
-		sleep(10000);
+			sleep(10000);
 
-		stop = true;
+			stop = true;
 
-		m.join();
-		s.join();
-
-		// 생각보다 더 어려운 문제이다. 
-		// 락프리를 제대로 보겠군. 되면 좋겠다. 
-
-
-		//
-		// facebook의 folly에 RWSpinlock이 있다. 
-		// 
+			m.join();
+			s.join();
 	}
 }
