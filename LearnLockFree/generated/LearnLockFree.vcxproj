@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\pch.hpp" />
     <ClInclude Include="..\src\spinlock.hpp" />
+    <ClInclude Include="..\src\tick.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp" />
