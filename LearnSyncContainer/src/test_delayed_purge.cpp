@@ -19,8 +19,8 @@ namespace {
 struct pc
 {
 	int id = 0; 
+	int sector_id = 0;
 	std::size_t index = 0;
-	bool removed = false;
 
 	pc(int _id)
 		: id(_id)
@@ -43,7 +43,7 @@ public:
 		{
 			std::lock_guard<util::spinlock> lock(lock_pc_);
 			pcs_.insert(pc_map::value_type(_pc->id, _pc));
-			_pc->removed = false;
+			_pc->sector_id = get_sector_id();
 		}
 
 		// sync locked
@@ -58,7 +58,6 @@ public:
 		// pc locked
 		{
 			std::lock_guard<util::spinlock> lock(lock_pc_);
-			_pc->removed = true;
 			++remove_count_;
 			pcs_.erase(_pc->id);
 		}
@@ -70,6 +69,11 @@ public:
 	{
 		std::shared_lock sl(lock_sync_);
 		dst.assign(cv_.begin(), cv_.end()); 
+	}
+
+	int get_sector_id() const
+	{
+		return sector_id_;
 	}
 
 private:
@@ -96,13 +100,14 @@ private:
 			std::unique_lock ul(lock_sync_);
 
 			cv_.erase(std::find_if(cv_.begin(), cv_.end(),
-				[](pc* _pc) {
-					return _pc->removed;
+				[this](pc* _pc) {
+					return _pc->sector_id != get_sector_id();
 				}), cv_.end());
 		}
 	}
 
 private: 
+	int sector_id_ = 0;
 	util::spinlock lock_pc_;
 	std::shared_mutex lock_sync_; // read write lock
 	pc_map pcs_;
@@ -152,7 +157,7 @@ TEST_CASE("delayed purge", "sync")
 
 					for (auto& p : lst)
 					{
-						if (!p->removed)
+						if (p->sector_id == s1.get_sector_id())
 						{
 
 						}
@@ -166,13 +171,5 @@ TEST_CASE("delayed purge", "sync")
 
 		m.join();
 		s.join();
-
-		// 생각보다 더 어려운 문제이다. 
-		// 락프리를 제대로 보겠군. 되면 좋겠다. 
-
-
-		//
-		// facebook의 folly에 RWSpinlock이 있다. 
-		// 
 	}
 }

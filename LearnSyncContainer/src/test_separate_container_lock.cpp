@@ -19,6 +19,7 @@ namespace {
 struct pc
 {
 	int id = 0;
+	int sector_id = 0;
 	std::size_t index = 0;
 	bool removed = false;
 
@@ -43,7 +44,7 @@ public:
 		{
 			std::lock_guard<util::spinlock> lock(lock_pc_);
 			pcs_.insert(pc_map::value_type(_pc->id, _pc));
-			_pc->removed = false;
+			_pc->sector_id = get_sector_id();
 		}
 
 		// sync locked
@@ -58,7 +59,7 @@ public:
 		// pc locked
 		{
 			std::lock_guard<util::spinlock> lock(lock_pc_);
-			_pc->removed = true;
+			_pc->sector_id = 0; 
 			pcs_.erase(_pc->id);
 		}
 
@@ -67,8 +68,8 @@ public:
 			std::unique_lock ul(lock_sync_);
 
 			cv_.erase(std::find_if(cv_.begin(), cv_.end(),
-				[](pc* _pc) {
-					return _pc->removed;
+				[this](pc* _pc) {
+					return _pc->sector_id != get_sector_id();
 				}), cv_.end());
 		}
 	}
@@ -79,29 +80,17 @@ public:
 		dst.assign(cv_.begin(), cv_.end()); // 전체 복사. copy가 더 빠른가?
 	}
 
-private:
-	void purge()
+	int get_sector_id() const
 	{
-		// 더 빠를까? 벡터 복사 부담이 증가하므로 아닐 수도 있다. 
-		// 조절이 필요한 부분이다. 
-
-		// 커질 경우 일찍 purge 한다. 
-		// 아닐 경우 주기적으로 purge 한다.  
-
-		if (purge_tick_.elapsed() > 1000)
-		{
-			purge_tick_.reset();
-
-		
-		}
+		return sector_id_;
 	}
 
 private:
+	int sector_id_ = 1;
 	util::spinlock lock_pc_;
 	std::shared_mutex lock_sync_; // read write lock (rwspinlock이라고 봐도 되고, 스핀락을 써도 된다)
 	pc_map pcs_;
 	vec cv_;
-	util::simple_tick purge_tick_;
 };
 
 void sleep(std::size_t msec)
@@ -146,7 +135,7 @@ TEST_CASE("concurrent vector", "sync")
 
 					for (auto& p : lst)
 					{
-						if (!p->removed)
+						if (p->sector_id == s1.get_sector_id())
 						{
 
 						}
@@ -154,11 +143,11 @@ TEST_CASE("concurrent vector", "sync")
 				}
 			}).swap(s);
 
-			sleep(10000);
+		sleep(10000);
 
-			stop = true;
+		stop = true;
 
-			m.join();
-			s.join();
+		m.join();
+		s.join();
 	}
 }
