@@ -11,14 +11,15 @@ inline std::basic_string<Char> format(const S& format_str, Args&&... args) {
 }
 ```
 
-char_t<S>는 무엇?
+`char_t<S>`는 무엇?
 
 ```c++
 /** String's character type. */
 template <typename S> using char_t = typename internal::char_t_impl<S>::type;
 ```
 
-char_t_impl<S>는 타잎 추론. void는 에러 나도록 함
+`char_t_impl<S>`는 타잎 추론. void는 에러 나도록 함
+
 ```c++
 template <typename S, typename = void> struct char_t_impl {};
 template <typename S> struct char_t_impl<S, enable_if_t<is_string<S>::value>> {
