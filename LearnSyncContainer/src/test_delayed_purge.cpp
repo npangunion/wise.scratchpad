@@ -125,6 +125,15 @@ void sleep(std::size_t msec)
 
 TEST_CASE("delayed purge", "sync")
 {
+	SECTION("mutex")
+	{
+		std::mutex m; 
+
+		m.lock();
+
+		m.unlock();
+	}
+
 	SECTION("flow")
 	{
 		sector s1;
