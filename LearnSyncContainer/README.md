@@ -62,6 +62,11 @@ CPU를 많이 쓰는 문제는 해결될 수도 있어 보인다.
 응답 시간을 체감 플레이와 측정으로 분석해 볼 수 있다. 
 
 
+## 다시 - context switching 비용이라면 
 
+현재 critical section이고, context switching 비용이 높아서 발생한 문제였다면??
+- YieldProcessor를 갖는 spinlock이 성능 향상을 크게 높일 수도 있다. 
 
+rwlock이 아니고 순수 mutex 였다면 
+- readwrite spinlock 또는 shared_mutex가 크게 도움이 될 수 있다. 
 
