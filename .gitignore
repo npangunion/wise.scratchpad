@@ -43,3 +43,4 @@ Release
 /LearnRecast/generated
 /LearnGeom/generated
 /LearnGeom/build
+/LearnLockFree/generated/LearnLockFree.vcxproj.user
