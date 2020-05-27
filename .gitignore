@@ -44,3 +44,4 @@ Release
 /LearnGeom/generated
 /LearnGeom/build
 /LearnLockFree/generated/LearnLockFree.vcxproj.user
+/LearnVectorCalculus/Graph/.ipynb_checkpoints
